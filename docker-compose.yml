@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest                # Використовуйте "mysql:latest" для MySQL
+    container_name: phone_station_db
+    environment:
+      POSTGRES_USER: Sydorenko                # Задайте логін
+      POSTGRES_PASSWORD: 1111         # Задайте пароль
+      POSTGRES_DB: phonestation           # Ім'я бази даних
+    ports:
+      - "5432:5432"                       # Прокидання порту для PostgreSQL (для MySQL замініть на "3306:3306")
+    volumes:
+      - ./db_data:/var/lib/postgresql/data # Папка для збереження даних БД
+
+  pgadmin:
+    image: dpage/pgadmin4                 # Образ для pgAdmin
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com # Email для входу в pgAdmin
+      PGADMIN_DEFAULT_PASSWORD: admin        # Пароль для входу в pgAdmin
+    ports:
+      - "8080:80"                         # Прокидання порту для доступу до pgAdmin
+
+  adminer:
+    image: adminer                         # Образ для Adminer
+    container_name: phone_station_adminer
+    depends_on:
+      - db                                 # Спочатку запускається сервіс БД
+    ports:
+      - "8081:8080"                        # Прокидання порту для доступу до Adminer
